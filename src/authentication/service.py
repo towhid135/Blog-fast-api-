@@ -3,10 +3,10 @@ from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 import os
 from utilities.db import user_collection
-from .schemas import Signup
+from .schemas import Signup,Claims
 from .models import SuccessResponseModel, ErrorResponseModel
 from utilities import exceptions
-from utilities.datetime_function import create_timestamps
+from utilities.datetime_function import create_timestamps, adjust_current_time_in_utc
 from .utils import get_password_hash
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -47,11 +47,14 @@ async def create_user(signup_data: Signup) -> SuccessResponseModel | ErrorRespon
         return error_object
 
 
-def create_access_token():
-    jwt_payload = {}
-    expire = datetime.now(timezone.utc) + timedelta(minutes=30)
-    jwt_payload.update({"exp": expire})
-    encoded_jwt = jwt.encode(jwt_payload, SECRET_KEY, algorithm=ALGORITHM)
+def create_access_token(user_id):
+    jwt_payload = Claims()
+    issued_at = create_timestamps()
+    expire = adjust_current_time_in_utc("add", 30)
+    jwt_payload.iat = issued_at
+    jwt_payload.exp = expire
+    jwt_payload.sub = user_id
+    encoded_jwt = jwt.encode(jwt_payload.model_dump(), SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 
