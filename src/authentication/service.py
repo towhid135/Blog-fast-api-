@@ -47,14 +47,14 @@ async def create_user(signup_data: Signup) -> SuccessResponseModel | ErrorRespon
         return error_object
 
 
-# def create_access_token():
-#     jwt_payload = {}
-#     expire = datetime.now(timezone.utc) + timedelta(minutes=30)
-#     jwt_payload.update({"exp": expire})
-#     encoded_jwt = jwt.encode(jwt_payload, SECRET_KEY, algorithm=ALGORITHM)
-#     return encoded_jwt
-#
-#
-# def decode_jwt(access_token):
-#     decoded_jwt = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
-#     return decoded_jwt
+def create_access_token():
+    jwt_payload = {}
+    expire = datetime.now(timezone.utc) + timedelta(minutes=30)
+    jwt_payload.update({"exp": expire})
+    encoded_jwt = jwt.encode(jwt_payload, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+
+def decode_jwt(access_token):
+    decoded_jwt = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
+    return decoded_jwt

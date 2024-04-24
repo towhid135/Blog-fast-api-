@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime,timezone
 
 
 def create_timestamps():
-    return datetime.now().replace(microsecond=0).timestamp()
+    timestamp_utc = datetime.now(tz=timezone.utc).replace(microsecond=0).timestamp()
+    return timestamp_utc
